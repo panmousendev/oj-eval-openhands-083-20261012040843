@@ -48,41 +48,34 @@ public:
             return value;
         }
         
-        // Find the (m-1)-th node (node before the one to be removed)
-        Node* prev = nullptr;
-        Node* current = head;
+        // Find the node before the one to be removed
+        Node* prev = head;
         
-        // Move (m-1) steps to find the node before the one to remove
-        for (int i = 1; i < m; i++) {
-            prev = current;
-            current = current->next;
-        }
-        
-        // Remove current node
-        int value = current->data;
-        
-        // Special case: if m=1, prev is nullptr, we need to find the last node
-        if (prev == nullptr) {
+        // Special case: if m = 1, we need to find the last node
+        if (m == 1) {
             // Find the last node (node before head)
-            Node* last = head;
-            while (last->next != head) {
-                last = last->next;
+            while (prev->next != head) {
+                prev = prev->next;
             }
-            prev = last;
+        } else {
+            // Move (m-2) steps to find the node before the m-th node
+            for (int i = 1; i < m - 1; i++) {
+                prev = prev->next;
+            }
         }
         
-        prev->next = current->next;
+        // The node to remove is prev->next
+        Node* toRemove = prev->next;
+        int value = toRemove->data;
         
-        // Update head if we removed the head
-        if (current == head) {
-            head = current->next;
-        }
+        // Remove the node
+        prev->next = toRemove->next;
         
-        delete current;
+        // Update head to the node after the removed one
+        head = toRemove->next;
+        
+        delete toRemove;
         size--;
-        
-        // Return the next node as the new starting point
-        head = prev->next;
         
         return value;
     }
