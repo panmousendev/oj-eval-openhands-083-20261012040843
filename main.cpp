@@ -60,6 +60,17 @@ public:
         
         // Remove current node
         int value = current->data;
+        
+        // Special case: if m=1, prev is nullptr, we need to find the last node
+        if (prev == nullptr) {
+            // Find the last node (node before head)
+            Node* last = head;
+            while (last->next != head) {
+                last = last->next;
+            }
+            prev = last;
+        }
+        
         prev->next = current->next;
         
         // Update head if we removed the head
