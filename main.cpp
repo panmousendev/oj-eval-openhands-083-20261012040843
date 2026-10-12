@@ -27,39 +27,38 @@ int main() {
     
     // Josephus elimination
     while (n > 0) {
-        // Find the (m-1)-th node (node before the one to remove)
-        Node* prev = nullptr;
-        current = head;
-        
-        // Move (m-1) steps
-        for (int i = 1; i < m; i++) {
-            prev = current;
-            current = current->next;
-        }
-        
-        // Remove current node
-        cout << current->data << endl;
-        
         if (n == 1) {
-            // Last node, just delete it
-            delete current;
+            // Only one node left
+            cout << head->data << endl;
+            delete head;
             break;
         }
         
-        // Remove current from the list
-        if (prev == nullptr) {
-            // This happens when m = 1, need to find the last node
-            Node* last = head;
-            while (last->next != head) {
-                last = last->next;
+        // Find the node before the one to be removed
+        Node* prev;
+        if (m == 1) {
+            // Special case: m=1, find the last node
+            prev = head;
+            while (prev->next != head) {
+                prev = prev->next;
             }
-            prev = last;
+        } else {
+            // Move (m-2) steps from head to find the previous node
+            prev = head;
+            for (int i = 1; i < m - 1; i++) {
+                prev = prev->next;
+            }
         }
         
-        prev->next = current->next;
-        head = current->next;
+        // The node to remove is prev->next
+        Node* toRemove = prev->next;
+        cout << toRemove->data << endl;
         
-        delete current;
+        // Remove the node
+        prev->next = toRemove->next;
+        head = toRemove->next;
+        
+        delete toRemove;
         n--;
     }
     
